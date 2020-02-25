@@ -1,0 +1,82 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./css/style.css">
+
+    <title>Document</title>
+    <script src="./lib/vue.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+    <div id="mytodolist">
+        <input type="text" v-model:value="myValue" placeholder="请输入">
+        <button @click="addItem()">addItem</button>
+        <ul>
+            <div v-if="todolist.length">
+                <li v-for="(item,index) in todolist" :class="currentIndex===index?'red':''" 
+                    @mouseover="highlightCurrent(index)">
+                    {{item}}<button @click="deleteItem(index)" v-show="currentIndex===index">delete</button>
+                </li>
+            </div>
+            <div v-else>
+                <p>这个人好懒，什么也没留下</p>
+            </div>
+            
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+        // initialization
+        var vm = new Vue({
+            el:"#mytodolist",
+            data:{
+                todolist:[],
+                myValue:"",
+                currentIndex:-1,
+            },
+            methods: {
+                queryItem:function(toqueryItem) {
+                    var todolist = this.todolist;
+                    var index = -1;
+                    for (var i = 0; i < todolist.length; i ++) {
+                        if (todolist[i] == toqueryItem) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index == -1) {
+                        console.log("item: " + toqueryItem + " dosen't exist");
+                    }
+                    return index;
+                },
+                addItem:function() {
+                    if (this.myValue == "") {
+                        console.log("cannot add null");
+                        return false;
+                    }
+                    if (this.queryItem(this.myValue) != -1) {
+                        console.log("item: " + this.myValue + " alredy exists");
+                        this.myValue = "";
+                        return false;
+                    }
+                    console.log("myValue is: " + this.myValue);
+                    this.todolist.push(this.myValue);
+                    this.myValue = "";
+                },
+                deleteItem:function(index) {
+                    this.todolist.splice(index, 1);
+                    if (this.todolist.length == 0) {
+                        this.currentIndex = -1;
+                    }
+                },
+                // ES5对象简写
+                highlightCurrent(index) {
+                    this.currentIndex = index;
+                }
+            },
+        })
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!--姓名：黎福鑫 ；学号：17343058
+    作业内容：计算器-->
+<!DOCTYPE html>
+<html lang = "en-us">
+<head>
+    <title>calculator</title>
+    <link rel="stylesheet" type="text/css" href="calculator.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="calculator.js"></script>
+</head>
+
+<body>
+    <div id = calculator_container>
+        <div id = calculator>
+            <input type="text" name = "expression" id = "expression" readonly = "readonly" value = "0">
+            <div id = "buttons">
+                <div class="button_column">
+                        <button type="button" onclick="clickAt(7)">7</button>
+                        <button type="button" onclick="clickAt(8)">8</button>
+                        <button type="button" onclick="clickAt(9)">9</button>
+                        <button type="button" onclick="clickAt('/')">/</button>
+                </div>
+                <div class="button_column">
+                        <button type="button" onclick="clickAt(4)">4</button>
+                        <button type="button" onclick="clickAt(5)">5</button>
+                        <button type="button" onclick="clickAt(6)">6</button>
+                        <button type="button" onclick="clickAt('*')">*</button>
+                </div>
+                <div class="button_column">
+                        <button type="button" onclick="clickAt(1)">1</button>
+                        <button type="button" onclick="clickAt(2)">2</button>
+                        <button type="button" onclick="clickAt(3)">3</button>
+                        <button type="button" onclick="clickAt('-')">-</button>
+                </div>
+                <div class="button_column">
+                        <button type="button" onclick="clickAt(0)">0</button>
+                        <button type="button" onclick="clickAt('.')">.</button>
+                        <button type="button" onclick="backspace()">←</button>
+                        <button type="button" onclick="clickAt('+')">+</button>
+                </div>
+                <div class="button_column">
+                        <button type="button" onclick="clickAt('(')">(</button>
+                        <button type="button" onclick="clickAt(')')">)</button>
+                        <button type="button" onclick="clearAll()">CE</button>
+                        <button type="button" onclick="compute()">=</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

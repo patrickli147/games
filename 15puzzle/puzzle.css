@@ -1,0 +1,99 @@
+html, body {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+#puzzle-box {
+    width: 352px;
+    height: 352px;
+    margin: auto;
+}
+
+.small-pictures {
+    background: url("panda.jpg") no-repeat;
+    height: 25%;
+    width: 24.5%;
+    margin-top: -2px;
+    margin-bottom: -2px;
+    display: -webkit-inline-box;
+    border: lightgrey solid 0.8px;
+    cursor: pointer;
+}
+
+.small-pictures:hover {
+    transform: scale(1.06);
+}
+
+#picture1, #picture5, #picture9, #picture13 {
+    background-position-x: -87.84px;
+}
+
+#picture2, #picture6, #picture10, #picture14 {
+    background-position-x: -175.68px;
+}
+
+#picture3, #picture7, #picture11 {
+    background-position-x: -263.52px;
+}
+
+#picture4, #picture5, #picture6, #picture7 {
+    background-position-y: -89.6px;
+}
+
+#picture8, #picture9, #picture10, #picture11 {
+    background-position-y: -179.2px;
+}
+
+#picture12, #picture13, #picture14 {
+    background-position-y: -268.8px;
+}
+
+
+#picture15 {
+    background: none;
+    border: none;
+}
+
+#restart, #cheat ,#origin {
+    margin-top: 20px;
+    background-color: rgb(34, 112, 238);
+    box-shadow: 3px 3px 10px black;
+    font-size: 19px;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100px;
+    height: 35px;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s;
+    opacity: 0.8;
+    border: none;
+}
+
+#restart:hover, #cheat:hover, #origin:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+#flag {
+    color: red;
+    font-size: 25px;
+    text-align: center;
+    border: none;
+}
+
+#input-box {
+    margin: 10px;
+}
+
+#ori-img {
+    height: 0;
+    width: 0;
+}
+
+#ori-img1 {
+    height: 200px;
+    width: 200px;
+}
+
+

@@ -1,0 +1,49 @@
+<!--姓名：黎福鑫 ；学号：17343058
+    作业内容：打地鼠-->
+<!DOCTYPE html>
+<html lang = "en-us">
+<head>
+    <title>whac-a-mole</title>
+    <link rel="stylesheet" type="text/css" href="hole.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="hole.js"></script>
+</head>
+<body onload="set()">
+    <h1>Whac-a-mole</h1>
+    <p id="banner">Test your skill. How many boxes(moles) can you check(hit) in 30 seconds？</p>
+    <div id="hole-container">
+        <div id="data-container">
+            <div id="stop-start">
+                <input id="controler" value="Start Game | Stop Game" readonly = "readonly" />
+            </div>
+            <div id="timer">
+                Time:
+                <input id="time" readonly = "readonly" value="0"/>
+            </div>
+            <div id="game-over">
+                <input id="game" value="" readonly = "readonly" />
+            </div>
+            <div id="score-counter">
+                Score:
+                <input id="score" value = "0" readonly = "readonly" />
+            </div>
+        </div>
+
+        <div id="holes"></div>
+    </div>
+
+    <div id="level">
+        level(default medium):
+        <button id="easy">easy</button>
+        <button id="medium">medium</button>
+        <button id="tough">tough</button>
+    </div>
+
+    <div id="instructions">
+        <h2>Instructions:</h2>
+        <p id="instuction">1. Click on th radio buttons(moles) as they are selected randomly by the computer.<br />
+        2. 1 point per hit, minus 1 point per miss.</p>
+    </div>
+</body>
+   
+</html>

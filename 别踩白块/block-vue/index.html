@@ -1,0 +1,210 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+    <script src="./vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./mytimer.js" type="text/javascirpt"></script>
+</head>
+<body>
+    <div id="block">
+        <input type="text" :value="gameState" readonly="readonly">
+        <input type="text" :value="point" readonly="readonly">
+        <div>
+            <div class="block-container">
+                <button :class="item.class" v-for="(item,index) in blocks" :key="item.id" @click="score(item.id)" :style="blockStyle">
+                    {{item}}
+                </button>
+            </div>
+        </div>
+        <button @click="gameController()" class="controller">{{gameControllerInfo}}</button>
+        <button @click="pauseOrResume()" class="controller" v-show="gameControllerInfo==='restart'">{{pauseOrResumeInfo}}</button>
+    </div>
+    <script type="text/javascript">
+       var vm = new Vue({
+            el:"#block",
+            data: {
+                point: 0,
+                gameState:"stop",
+                gameControllerInfo:"start",
+                pauseOrResumeInfo:"pause",
+                blocks:[],
+                level:3000,
+                id:0,
+                playTimeInterval:[],
+                vanishTimeOut:[],
+                blockStyle: {
+                    animationPlayState:"running"
+                }
+            },
+            methods: {
+                gameController() {
+                    if (this.gameState == "stop") {
+                        this.gameState = "playing";
+                        this.gameControllerInfo = "restart"
+                        this.play();
+                    }
+                    else {
+                        this.blocks = [];
+                        for (var i = 0; i < this.playTimeInterval.length; i ++) {
+                            for (var j = 0; j < this.playTimeInterval[i].length; j ++) {
+                                this.playTimeInterval[i][j].clear();
+                            }
+                        }
+                        this.playTimeInterval = [];
+                        for (var i = 0; i < this.vanishTimeOut.length; i ++) {
+                            this.vanishTimeOut[i].clear();
+                        }
+                        this.vanishTimeOut = [];
+                        this.gameState = "playing";
+                        this.gameControllerInfo = "restart";
+                        this.id = 0;
+                        this.point = 0;
+                        this.blockStyle.animationPlayState = "running";
+                        this.pauseOrResumeInfo = "pause";
+                        this.play();
+                    }
+                },
+                pauseOrResume() {
+                    if (this.gameState == "playing") {
+                        this.gameState = "pause";
+                        this.pauseOrResumeInfo = "resume";
+                        this.blockStyle.animationPlayState = "paused";
+                        for (var i = 0; i < this.playTimeInterval.length; i ++) {
+                            for (var j = 0; j < this.playTimeInterval[i].length; j ++) {
+                                this.playTimeInterval[i][j].pause();
+                            }
+                        }
+                        for (var i = 0; i < this.vanishTimeOut.length; i ++) {
+                            this.vanishTimeOut[i].pause();
+                        }
+                    }
+                    else {
+                        this.gameState = "playing";
+                        this.pauseOrResumeInfo = "pause";
+                        this.blockStyle.animationPlayState = "running";
+                        for (var i = 0; i < this.playTimeInterval.length; i ++) {
+                            for (var j = 0; j < this.playTimeInterval[i].length; j ++) {
+                                if (this.playTimeInterval[i][j].remaining > 0 && this.playTimeInterval[i][j].remaining !== this.playTimeInterval[i][j].delay){
+                                    this.playTimeInterval[i][j].play();
+                                }
+                                else {
+                                    console.log("delete: " + this.playTimeInterval[i][j].remaining);
+                                    this.playTimeInterval[i].splice(j,1);
+                                    j --;
+                                }
+                            }
+                        }
+                        for (var i = 0; i < this.vanishTimeOut.length; i ++) {
+                            this.vanishTimeOut[i].play();
+                        }
+                    }
+                },
+                play() {
+                    var currentTimer = MysetInterval(this.createBlocks, 1000);
+                    this.playTimeInterval.push(currentTimer); 
+                    /*
+                    var thisCreateBlocks = this.createBlocks;
+                    var thisPlayTimeInterval = this.playTimeInterval;
+                    var timer1 = MysetTimeout(function() {
+                        thisCreateBlocks();
+                        var timer2 = MysetTimeout(this.play, 1000);
+                        thisPlayTimeInterval.push(timer2);
+                    }, 1000);
+                    this.playTimeInterval.push(timer1);
+                    */
+                },
+                createBlocks() {
+                    var newBlock = {id:"", class:""};
+                    newBlock.id = this.id;
+                    newBlock.class = this.getRandomClass();
+                    var currentVanishTimeout = MysetTimeout(this.vanish, 3000, newBlock.id)
+                    this.vanishTimeOut.push(currentVanishTimeout);
+                    this.id ++;
+                    this.blocks.push(newBlock);
+                    //this.move(newBlock.id);
+                },
+                vanish(id) {
+                    for (var i = 0; i < this.blocks.length; i ++) {
+                        if (this.blocks[i].id == id) {
+                            console.log("vanish: " + this.blocks[i].id);
+                            this.blocks.splice(i, 1);
+                            return;
+                        }
+                    }
+                },
+                move(id) {
+                    var currentBlocks = this.blocks;
+                    currentBlocks[id].moving = true;
+                    this.blocks = currentBlocks;
+                },
+                score(id) {
+                    if (this.gameState !== "playing") {
+                        return;
+                    }
+                    this.point ++;
+                    this.vanish(id);
+                },
+                getRandomClass() {
+                    var positiionDecider = Math.floor(Math.random() * 3);
+                    var newClassName = "";
+                    if (positiionDecider == 0) {
+                        newClassName = "block";
+                    }
+                    else if (positiionDecider == 1) {
+                        newClassName = "block middle";
+                    }
+                    else {
+                        newClassName = "block right";
+                    }
+                    return newClassName;
+                }
+            },
+       });
+
+
+        function MysetTimeout(callback, delay, arg) {
+            var setTimeoutId, start, remaining = delay;
+
+            pause = function () {
+                window.clearTimeout(setTimeoutId);
+                remaining -= new Date() - start;
+                controller.remaining = remaining;
+            };
+
+            play = function () {
+                start = new Date();
+                window.clearTimeout(setTimeoutId);
+                setTimeoutId= window.setTimeout(callback, remaining, arg);
+            };
+
+            clear = function() {
+                window.clearTimeout(setTimeoutId);
+            }
+
+            var controller = {};
+            controller.play = play;
+            controller.pause = pause;
+            controller.clear = clear;
+            controller.remaining = remaining;
+            controller.delay = delay;
+            play();
+            return controller;
+        }
+
+        function MysetInterval(callback, delay, arg) {
+            var controllers = [];
+            function callbackInterval() {
+                callback(arg);
+                var timer2 = MysetTimeout(callbackInterval,delay, arg);
+                controllers.push(timer2);
+            }
+            var timer1 = MysetTimeout(callbackInterval,delay,arg);
+            controllers.push(timer1);
+            return controllers;
+        }
+    </script>
+</body>
+</html>
